@@ -17,8 +17,7 @@ def median(values: list[float]) -> float:
     mid = n // 2
     if n % 2 == 1:
         return float(s[mid])
-    else:
-        return (s[mid - 1] + s[mid]) / 2
+    return (s[mid - 1] + s[mid]) / 2
 
 
 def variance_sample(values: list[float]) -> float:
@@ -67,6 +66,25 @@ def describe(values: list[float]) -> dict:
 def approx(a: float, b: float, eps: float = 1e-9) -> bool:
     """Проверка приблизительного равенства для тестов."""
     return abs(a - b) <= eps
+
+
+def prob_from_counts(count: int, n: int) -> float:
+    """Безопасно считает вероятность как count / n."""
+    if n <= 0:
+        raise ValueError("prob_from_counts: n must be > 0")
+    if count < 0 or count > n:
+        raise ValueError("prob_from_counts: invalid count")
+    return count / n
+
+
+def bayes_posterior(prior: float, likelihood: float, evidence: float) -> float:
+    """Апостериорная вероятность по формуле Байеса."""
+    for name, p in [("prior", prior), ("likelihood", likelihood), ("evidence", evidence)]:
+        if p < 0 or p > 1:
+            raise ValueError(f"bayes_posterior: {name} must be in [0,1]")
+    if evidence == 0:
+        raise ValueError("bayes_posterior: evidence must be > 0")
+    return (likelihood * prior) / evidence
 
 
 def run_all_tests() -> None:
